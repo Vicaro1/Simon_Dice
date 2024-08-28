@@ -1,12 +1,13 @@
 # Simon_Dice
 El proyecto consistirá en prototipar una versión del famoso juego Simon [1]. Para llevar a cabo la implementación se necesitarán los siguientes componentes:
  
-Una protoboard.
-Un microcontrolador: Arduino o ESP32.
-3 LEDs de colores: rojo, verde y amarillo.
-3 resistencias de 330 ohmios para los LEDs.
-4 pulsadores.
-4 resistencias de 4.7 K para los pulsadores.
+- Una protoboard.
+- Jumpers.
+- Arduino UNO REV 3
+- 3 LEDs de colores: rojo, verde y amarillo.
+- 3 resistencias de 330 ohmios para los LEDs.
+- 4 pulsadores.
+- 4 resistencias de 4.7 K para los pulsadores.
 
 El comportamiento del juego será el siguiente:
 1) Aparecerá un menú para que el usuario pueda elegir el nivel de dificultad. Habrá tres niveles. A más dificultad más rápido se encenderán los LEDs.
@@ -21,9 +22,17 @@ d.Si el usuario falla pierde una vida se vuelve al punto a y la secuencia de LED
 
 4) Hay un cuarto botón para reiniciar el juego.
 
-Mi versión expande los LEDs a cuatro junto a cinco botones (cuatro para los LEDs y uno de reinicio) 
-y un zumbador activo tal y como se ve en el juego verdadero, además le he añadido una pantalla TFT de 1.8 pulgadas.
+Mi versión expande los LEDs a cuatro junto a cinco botones (cuatro para los LEDs y uno de reinicio) y un zumbador activo tal y como se ve en el juego verdadero, además le he añadido una pantalla TFT de 1.8 pulgadas.
 El conexionado de los LED se realiza con resistencias de 220 Ω en vez de con 330 Ω.
 El conexionado de los botones se realiza solo con el cable de señal y uno a GND gracias al pullup interno que ofrece Arduino en sus pines.
+
+- Una protoboard.
+- Jumpers.
+- Arduino UNO REV 3
+- 4 LEDs de colores: rojo, verde, azul y amarillo.
+- 4 resistencias de 220 ohmios para los LEDs.
+- 5 pulsadores.
+- 1 zumbador.
+- 1 pantalla TFT de 1.8 pulgadas.
 
 [1] https://es.wikipedia.org/wiki/Simon_%28juego%29
