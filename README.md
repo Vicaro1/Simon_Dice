@@ -25,3 +25,5 @@ Mi versión expande los LEDs a cuatro junto a cinco botones (cuatro para los LED
 y un zumbador activo tal y como se ve en el juego verdadero, además le he añadido una pantalla TFT de 1.8 pulgadas.
 El conexionado de los LED se realiza con resistencias de 220 Ω en vez de con 330 Ω.
 El conexionado de los botones se realiza solo con el cable de señal y uno a GND gracias al pullup interno que ofrece Arduino en sus pines.
+
+[1] https://es.wikipedia.org/wiki/Simon_%28juego%29
