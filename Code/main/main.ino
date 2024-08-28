@@ -1,5 +1,5 @@
 /** Encabezado:
- * @file main
+ * @file main.ino
  * @brief Código del Simon Dice
  * @author [Victor Caro Pastor](https://github.com/Vicaro1)
  * @version  V5.1
@@ -60,69 +60,6 @@ uint8_t g_vidas = 3;
 uint8_t g_secuencia_generada[20]; 
 uint8_t g_ronda_actual = 0; 
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void setup()
-{
-  // Los botones tendran un pullup interno y seran pines de entrada.
-  pinMode(BOTON_RESET, INPUT_PULLUP);
-  pinMode(BOTON_ROJO, INPUT_PULLUP);
-  pinMode(BOTON_VERDE, INPUT_PULLUP);
-  pinMode(BOTON_AZUL, INPUT_PULLUP);
-  pinMode(BOTON_AMARILLO, INPUT_PULLUP);
-  
-  // Los leds y el zumbador seran pines de salida.
-  pinMode(LED_ROJO, OUTPUT);
-  pinMode(LED_VERDE, OUTPUT);
-  pinMode(LED_AZUL, OUTPUT);
-  pinMode(LED_AMARILLO, OUTPUT);
-  pinMode(ZUMBADOR, OUTPUT);
-
-  // Se configura la interrupcion.
-  attachInterrupt(digitalPinToInterrupt(BOTON_RESET), ISR_activar_reset, FALLING);
-  
-  // Se inicia la pantalla con todo en negro y se muestra la portada.
-  tft.initR(INITR_BLACKTAB);  
-  pantalla_inicio();
-  delay(2500);    
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void loop()
-{
-  // Se llama al procedimiento que escoge la dificultad.
-  escoger_dificultad(); 
-
-  // Para indicar que se va a iniciar el juego todos los led se encenderan a la vez durante 1 segundo.
-  estado_led(ELECCION_ROJO | ELECCION_VERDE | ELECCION_AZUL | ELECCION_AMARILLO);
-  delay(1000);
-  estado_led(APAGAR_LEDS);
-  delay(250);
-  
-  // Se muestra la pantalla con las vidas y se indican las 3 vidas disponibles.
-  pantalla_vidas();
-  g_vidas = 3;
-  
-  // Se procede a jugar.
-  if (simon_dice()) 
-  {
-    // Si el jugador gana se muestra la pantalla ganadora y la melodia y secuencia de LEDs ganadora.
-    pantalla_ganador(); 
-    jugador_gana(); 
-  }
-  else
-  {
-    // Si el jugador pierde se muestra la pantalla perdedora y la melodia y secuencia de LEDs perdedora.
-    pantalla_perdedor();
-    jugador_pierde();
-  }
-  delay(1000);
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCIONES JUEGO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -131,8 +68,8 @@ void loop()
  *  Argumentos de Entrada:
  *    (void) Ninguno
  *  Argumentos de Salida:
- *    true: Si el jugador completa todas las rondas exitosamente.
- *    false: Si el jugador no completa todas las rondas exitosamente.
+ *    (bool) true: Si el jugador completa todas las rondas exitosamente.
+ *    (bool) false: Si el jugador no completa todas las rondas exitosamente.
 */
 bool simon_dice(void)
 {
@@ -276,7 +213,12 @@ void visualizar_secuencia(void)
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCIONES HARDWARE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// Se prepara la ISR donde se reseteara la ronda actual, las vidas y actualizara la pantalla.
+/* Se prepara la ISR donde se reseteara la ronda actual, las vidas y actualizara la pantalla.
+ *  Argumentos de Entrada:
+ *    (void) Ninguno
+ *  Argumentos de Salida:
+ *    (void) Ninguno
+*/
 void ISR_activar_reset()
 {
   g_ronda_actual = 0;
@@ -637,4 +579,66 @@ void pantalla_ganador() {
   tft.println("WINNER");
   tft.setCursor(10, 105); tft.setTextColor(ST7735_YELLOW); tft.setTextSize(3);
   tft.println("WINNER");
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+void setup()
+{
+  // Los botones tendran un pullup interno y seran pines de entrada.
+  pinMode(BOTON_RESET, INPUT_PULLUP);
+  pinMode(BOTON_ROJO, INPUT_PULLUP);
+  pinMode(BOTON_VERDE, INPUT_PULLUP);
+  pinMode(BOTON_AZUL, INPUT_PULLUP);
+  pinMode(BOTON_AMARILLO, INPUT_PULLUP);
+  
+  // Los leds y el zumbador seran pines de salida.
+  pinMode(LED_ROJO, OUTPUT);
+  pinMode(LED_VERDE, OUTPUT);
+  pinMode(LED_AZUL, OUTPUT);
+  pinMode(LED_AMARILLO, OUTPUT);
+  pinMode(ZUMBADOR, OUTPUT);
+
+  // Se configura la interrupcion.
+  attachInterrupt(digitalPinToInterrupt(BOTON_RESET), ISR_activar_reset, FALLING);
+  
+  // Se inicia la pantalla con todo en negro y se muestra la portada.
+  tft.initR(INITR_BLACKTAB);  
+  pantalla_inicio();
+  delay(2500);    
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+void loop()
+{
+  // Se llama al procedimiento que escoge la dificultad.
+  escoger_dificultad(); 
+
+  // Para indicar que se va a iniciar el juego todos los led se encenderan a la vez durante 1 segundo.
+  estado_led(ELECCION_ROJO | ELECCION_VERDE | ELECCION_AZUL | ELECCION_AMARILLO);
+  delay(1000);
+  estado_led(APAGAR_LEDS);
+  delay(250);
+  
+  // Se muestra la pantalla con las vidas y se indican las 3 vidas disponibles.
+  pantalla_vidas();
+  g_vidas = 3;
+  
+  // Se procede a jugar.
+  if (simon_dice()) 
+  {
+    // Si el jugador gana se muestra la pantalla ganadora y la melodia y secuencia de LEDs ganadora.
+    pantalla_ganador(); 
+    jugador_gana(); 
+  }
+  else
+  {
+    // Si el jugador pierde se muestra la pantalla perdedora y la melodia y secuencia de LEDs perdedora.
+    pantalla_perdedor();
+    jugador_pierde();
+  }
+  delay(1000);
 }
