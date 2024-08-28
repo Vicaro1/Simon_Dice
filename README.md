@@ -35,4 +35,6 @@ El conexionado de los botones se realiza solo con el cable de señal y uno a GND
 - 1 zumbador.
 - 1 pantalla TFT de 1.8 pulgadas.
 
+Enlace a drive con un video del funcionamiento: https://drive.google.com/drive/folders/1JYdAMvrbuCAG9qTBAdNFUJot6hW1OgIq?usp=sharing
+
 [1] https://es.wikipedia.org/wiki/Simon_%28juego%29
